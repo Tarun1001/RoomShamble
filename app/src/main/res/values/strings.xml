@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RoomShamble</string>
+    <string name="hey_there">Hey There,</string>
+    <string name="create_an_account">create an Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_id">Email ID</string>
+    <string name="password">Password</string>
+    <string name="terms_and_conditions">By continuing you accept our Privavy policy and Term of Use</string>
+</resources>
