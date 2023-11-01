@@ -78,7 +78,12 @@ fun HeadingTextComponent(value: String) {
 }
 
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun MyTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onTextChanged: (String) -> Unit,
+    errorStatus: Boolean
+) {
     val textValue = remember {
         mutableStateOf("")
     }
@@ -97,20 +102,28 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
 
-        onValueChange = { textValue.value = it },
+        onValueChange = {
+            textValue.value = it
+            onTextChanged(it)
+        },
         leadingIcon = {
             Icon(
                 painter = painterResource, contentDescription = ""
             )
         },
+        isError = !errorStatus
 
-
-        )
+    )
 }
 
 @Composable
-fun PasswordFieldComponent(labelValue: String, painterResource: Painter) {
-    val localFocusManager= LocalFocusManager.current
+fun PasswordFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onTextChanged: (String) -> Unit,
+    errorStatus: Boolean
+) {
+    val localFocusManager = LocalFocusManager.current
     val password = remember {
         mutableStateOf("")
     }
@@ -133,7 +146,7 @@ fun PasswordFieldComponent(labelValue: String, painterResource: Painter) {
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password, imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions{localFocusManager.clearFocus()},
+        keyboardActions = KeyboardActions { localFocusManager.clearFocus() },
         singleLine = true,
         maxLines = 1,
         onValueChange = { password.value = it },
@@ -157,7 +170,8 @@ fun PasswordFieldComponent(labelValue: String, painterResource: Painter) {
                 Icon(painter = painterResource, contentDescription = "")
             }
         },
-        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+        isError = !errorStatus
 
     )
 }
@@ -240,9 +254,9 @@ fun TextFieldComponent(labelValue: String) {
 }
 
 @Composable
-fun ButtonComponent(value: String) {
+fun ButtonComponent(value: String, onButtonClicked: () -> Unit) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { onButtonClicked.invoke() },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
@@ -324,12 +338,12 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
         onClick = { offset ->
 
             annotatedString.getStringAnnotations(offset, offset).firstOrNull()?.also { span ->
-                    Log.d("ClickableTextComponent", "{${span.item}}")
+                Log.d("ClickableTextComponent", "{${span.item}}")
 
-                    if (span.item == loginText) {
-                        onTextSelected(span.item)
-                    }
+                if (span.item == loginText) {
+                    onTextSelected(span.item)
                 }
+            }
 
         },
     )

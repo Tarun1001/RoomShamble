@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roomshamble.R
 import com.example.roomshamble.components.ButtonComponent
 import com.example.roomshamble.components.CheckBoxComponent
@@ -23,12 +24,14 @@ import com.example.roomshamble.components.HeadingTextComponent
 import com.example.roomshamble.components.MyTextFieldComponent
 import com.example.roomshamble.components.NormalTextComponent
 import com.example.roomshamble.components.PasswordFieldComponent
+import com.example.roomshamble.data.LoginViewModel
+import com.example.roomshamble.data.UIEvent
 import com.example.roomshamble.navigation.RoomShambleRouter
 import com.example.roomshamble.navigation.Screen
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(loginViewModel: LoginViewModel = viewModel()) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -41,23 +44,42 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.height(20.dp))
             MyTextFieldComponent(
                 labelValue = stringResource(R.string.first_name),
-                painterResource(id = R.drawable.baseline_person)
+                painterResource(id = R.drawable.baseline_person),
+                onTextChanged = {
+                    loginViewModel.onEvent(UIEvent.FirstNameChanged(it))
+                },
+                errorStatus = loginViewModel.registrationUIState.value.firstNameError
             )
             MyTextFieldComponent(
                 labelValue = stringResource(R.string.last_name),
-                painterResource = painterResource(id = R.drawable.baseline_person)
+                painterResource = painterResource(id = R.drawable.baseline_person),
+                onTextChanged = {
+                    loginViewModel.onEvent(UIEvent.LastNameChanged(it))
+                },
+                errorStatus = loginViewModel.registrationUIState.value.lastNameError
+
             )
             MyTextFieldComponent(
                 labelValue = stringResource(R.string.email_id),
-                painterResource = painterResource(id = R.drawable.baseline_person)
+                painterResource = painterResource(id = R.drawable.baseline_person),
+                onTextChanged = {
+                    loginViewModel.onEvent(UIEvent.EmailChanged(it))
+                },
+                errorStatus = loginViewModel.registrationUIState.value.emailError
+
             )
             PasswordFieldComponent(
                 labelValue = stringResource(R.string.password),
-                painterResource = painterResource(id = R.drawable.baseline_person)
+                painterResource = painterResource(id = R.drawable.baseline_person),
+                onTextChanged = {
+                    loginViewModel.onEvent(UIEvent.PasswordChanged(it))
+                },
+                errorStatus = loginViewModel.registrationUIState.value.passwordError
+
             )
             CheckBoxComponent(stringResource(id = R.string.terms_and_conditions))
             Spacer(modifier = Modifier.height(80.dp))
-            ButtonComponent(stringResource(R.string.register))
+            ButtonComponent(stringResource(R.string.register), onButtonClicked = {loginViewModel.onEvent(UIEvent.RegisterButtonClicked)})
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
