@@ -15,11 +15,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.roomshamble.R
+import com.example.roomshamble.components.ButtonComponent
 import com.example.roomshamble.components.CheckBoxComponent
+import com.example.roomshamble.components.ClickableLoginTextComponent
+import com.example.roomshamble.components.DividerTextComponent
 import com.example.roomshamble.components.HeadingTextComponent
 import com.example.roomshamble.components.MyTextFieldComponent
 import com.example.roomshamble.components.NormalTextComponent
 import com.example.roomshamble.components.PasswordFieldComponent
+import com.example.roomshamble.navigation.RoomShambleRouter
+import com.example.roomshamble.navigation.Screen
 
 
 @Composable
@@ -51,6 +56,13 @@ fun SignUpScreen() {
                 painterResource = painterResource(id = R.drawable.baseline_person)
             )
             CheckBoxComponent(stringResource(id = R.string.terms_and_conditions))
+            Spacer(modifier = Modifier.height(80.dp))
+            ButtonComponent(stringResource(R.string.register))
+            Spacer(modifier = Modifier.height(20.dp))
+            DividerTextComponent()
+            ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
+                RoomShambleRouter.navigateTo(Screen.LoginScreen)
+            })
         }
 
     }
